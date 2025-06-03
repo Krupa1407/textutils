@@ -14,79 +14,82 @@ import {
 
 
 function App() {
-  const[alert , setalert] = useState(null);
-  const[mode , setmode] = useState('light');
-  const[pmode , setpmode] = useState('pink');
+  const [alert, setalert] = useState(null);
+  const [mode, setmode] = useState('light');
+  const [pmode, setpmode] = useState('pink');
 
-  const showalert = (message , type) => {
+  const showalert = (message, type) => {
     setalert({
-      msg : message ,
-      type : type
+      msg: message,
+      type: type
     })
     setTimeout(() => {
       setalert(null);
     }, 1500);
   }
 
-  const removebodyclass=(cls)=>{
-    document.body.classList.remove("bg-"+cls)
+
+  const removebodyclass = () => {
+    document.body.classList.remove('bg-primary', 'bg-danger', 'bg-success', 'bg-warning', 'bg-dark', 'bg-light');
   }
 
-  const togglemode = (cls) =>{
-    removebodyclass(cls);
-    document.body.classList.add("bg-"+cls)
-    if(mode === "light"){
-      setmode("dark");
-      document.body.style.backgroundColor = "#03275d";
-      showalert("dark mode has been enbaled." , "success");
-      document.title = "Textutils - Darkmode";
+const togglemode = (cls) => {
+  removebodyclass();
+  if(cls === null) {
+    // Toggle between light/dark
+    if(mode === 'light') {
+      setmode('dark');
+      document.body.style.backgroundColor = '#03275d';
+    } else {
+      setmode('light');
+      document.body.style.backgroundColor = 'white';
     }
-    else{
-      setmode("light");
-      document.body.style.backgroundColor = "white";
-      showalert("light mode has been enbaled." , "success");
-      document.title = "Textutils - Lightmode";
-    }
+  } else {
+    // Apply color mode to body only
+    document.body.classList.add('bg-' + cls);
+    // Keep navbar in current light/dark mode
+    document.body.style.backgroundColor = '';
   }
+}
 
   //for different colors
-  const togglecolor = () =>{
-    if(pmode === "pink"){
+  const togglecolor = () => {
+    if (pmode === "pink") {
       setpmode("pink");
       document.body.style.backgroundColor = "pink";
-      showalert("pink mode has been enbaled." , "success");
+      showalert("pink mode has been enbaled.", "success");
       setpmode("light");
     }
-    else{
+    else {
       setpmode("light");
       document.body.style.backgroundColor = "white";
-      showalert("pink mode has been disabled." , "success");
+      showalert("pink mode has been disabled.", "success");
       setpmode("pink");
     }
   }
   return (
     <>
-    <Router>
-    {/* <Navbar title = "title2" about = "about textutils"/> */}
-    {/* <Navbar/> */}
-    <Navbar title = "Textutils"  about = "about"  mode = {mode} togglemode = {togglemode} pmode = {pmode} togglecolor = {togglecolor}/>
-    <Alert alert = {alert}/>
-    <div className="container my-3">
-    <Routes>
-          <Route exact path="/about" element={<About mode={mode}/>}/>
-          <Route exact path="/" element={<TextForm heading = "enter the heading you want to show." showalert = {showalert} mode = {mode}/>}/>
+      <Router>
+        {/* <Navbar title = "title2" about = "about textutils"/> */}
+        {/* <Navbar/> */}
+        <Navbar title="Textutils" about="about" mode={mode} togglemode={togglemode} pmode={pmode} togglecolor={togglecolor} />
+        <Alert alert={alert} />
+        <div className="container my-3">
+          <Routes>
+            <Route exact path="/about" element={<About mode={mode} />} />
+            <Route exact path="/" element={<TextForm heading="enter the heading you want to show." showalert={showalert} mode={mode} />} />
 
-          {/* note : the below one is throwing the error.
+            {/* note : the below one is throwing the error.
           <Route path="/about">
             <About />
           </Route>
           <Route path="/">
             <TextForm heading = "enter the heading you want to show." showalert = {showalert} mode = {mode}/> 
           </Route> */}
-          
-    </Routes>
-    </div>
-    </Router>
+
+          </Routes>
+        </div>
+      </Router>
     </>
   );
 }
